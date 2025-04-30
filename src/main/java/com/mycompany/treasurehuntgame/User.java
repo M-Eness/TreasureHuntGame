@@ -14,23 +14,23 @@ import javax.swing.JOptionPane;
 // ----------------------------
 // MapNode.java
 // ----------------------------
-
 public class User extends javax.swing.JFrame {
 
     /**
      * Creates new form User
      */
     String username;
-    int position;
+    MapNode currentNode;
     int score;
 
     public User() {
         initComponents();
         this.username = null;
-        this.position = 0;
+        this.currentNode = null;
         this.score = 0;
         jTextField1.setText("");
     }
+
     public void updateScore(String type) {
         switch (type) {
             case "treasure":
@@ -45,22 +45,33 @@ public class User extends javax.swing.JFrame {
     public void move(String type) {
         switch (type) {
             case "forward":
-                position += 2;
+                currentNode.index += 2;
                 break;
             case "backward":
-                position = Math.max(0, position - 2);
+                currentNode.index = Math.max(0, currentNode.index - 2);
                 break;
         }
     }
 
+    public void moveForward(int steps) {
+        for (int i = 0; i < steps && currentNode != null && currentNode.next != null; i++) {
+            currentNode = currentNode.next;
+        }
+    }
+
+    public void moveBackward(int steps) {
+        for (int i = 0; i < steps && currentNode != null && currentNode.prev != null; i++) {
+            currentNode = currentNode.prev;
+        }
+    }
+
     public void resetPosition() {
-        this.position = 0;
+        this.currentNode = null;
     }
 
     public void resetScore() {
         this.score = 0;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -143,7 +154,7 @@ public class User extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Username cannot be empty !", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             username = jTextField1.getText();
-            Game game  = new Game(this);
+            Game game = new Game(this);
             game.setVisible(true);
             game.setLocationRelativeTo(null);
             this.dispose();

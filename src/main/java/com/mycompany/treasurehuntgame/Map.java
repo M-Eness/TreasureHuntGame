@@ -47,6 +47,7 @@ class LinkedListMap {
         tail = current;
         return dummy;
     }
+    
 
     private String randomType(int level) {
         String[] types;
@@ -69,10 +70,10 @@ class LinkedListMap {
         System.out.println("END");
     }
 
-    public MapNode getNodeAt(int position) {
+    public MapNode getNodeAtFirst(int position) {
         MapNode current = head;
         int count = 0;
-        while (current != null && count < position) {
+        while (current != null && count < position-1) {
             current = current.next;
             count++;
         }
