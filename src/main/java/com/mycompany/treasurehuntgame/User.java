@@ -56,12 +56,14 @@ public class User extends javax.swing.JFrame {
     public void moveForward(int steps) {
         for (int i = 0; i < steps && currentNode != null && currentNode.next != null; i++) {
             currentNode = currentNode.next;
+          
         }
     }
 
     public void moveBackward(int steps) {
         for (int i = 0; i < steps && currentNode != null && currentNode.prev != null; i++) {
             currentNode = currentNode.prev;
+           
         }
     }
 

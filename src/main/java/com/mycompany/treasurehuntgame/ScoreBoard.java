@@ -37,8 +37,6 @@ public class ScoreBoard extends javax.swing.JFrame {
         bst.printScores(bst.root, jLabel6);
         jLabel7.setText(bst.findMax(bst.root));
         jLabel8.setText(bst.findMin(bst.root));
-        System.out.println("Best score: " + bst.findMax(bst.root));
-        System.out.println("Worst score: " + bst.findMin(bst.root));
     }
 
     /**

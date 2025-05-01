@@ -8,7 +8,7 @@ class MapNode {
     int index;
     String type; // "treasure", "trap", "empty", "forward", "backward"
     MapNode next;
-    MapNode prev; 
+    MapNode prev;
 
     public MapNode(int index, String type) {
         this.index = index;
@@ -23,10 +23,11 @@ class MapNode {
     }
 }
 // MAP Sınıfı doubly linked list
+
 class LinkedListMap {
 
     MapNode head;
-    MapNode tail; 
+    MapNode tail;
     int size;
     Random rand = new Random();
 
@@ -36,10 +37,31 @@ class LinkedListMap {
     }
 
     private MapNode generateMap(int size, int level) {
-        MapNode dummy = new MapNode(0, randomType(level));
+        String random = randomType(level);
+        int forward = 0;
+        int backward = 0;
+
+        while (random == "backward") {
+            random = randomType(level);
+        }
+        MapNode dummy = new MapNode(0, random);
+        if (random == "forward") {
+            forward++;
+        }
+
         MapNode current = dummy;
         for (int i = 1; i < size; i++) {
-            MapNode newNode = new MapNode(i, randomType(level));
+            String randomType = randomType(level);
+            if (randomType == "forward") {
+                forward++;
+            } else if (randomType == "backward") {
+                backward++;
+            }
+            while ((forward > 5 && randomType == "forward") || (backward > 5 && randomType == "backward")) {
+                randomType = randomType(level);
+            }
+
+            MapNode newNode = new MapNode(i, randomType);
             current.next = newNode;
             newNode.prev = current;
             current = newNode;
@@ -47,15 +69,14 @@ class LinkedListMap {
         tail = current;
         return dummy;
     }
-    
 
     private String randomType(int level) {
         String[] types;
         if (level == 1) {
             types = new String[]{"treasure", "trap", "empty"};
-        } else if (level == 2) { 
+        } else if (level == 2) {
             types = new String[]{"treasure", "trap", "empty", "forward", "backward"};
-        }else{
+        } else {
             types = new String[]{"treasure", "trap", "empty", "forward", "backward"};
         }
         return types[rand.nextInt(types.length)];
@@ -73,7 +94,7 @@ class LinkedListMap {
     public MapNode getNodeAtFirst(int position) {
         MapNode current = head;
         int count = 0;
-        while (current != null && count < position-1) {
+        while (current != null && count < position - 1) {
             current = current.next;
             count++;
         }

@@ -73,11 +73,33 @@ public class Game extends javax.swing.JFrame {
     }
 
     private void updatePlayerPosition(int oldPos, int newPos) {
+        System.out.println("old: " + oldPos + " new: " + newPos);
         if (oldPos >= 0 && oldPos < mapLabels.length) {
             mapLabels[oldPos].setForeground(null); // eski rengi sıfırla
         }
         if (newPos >= 0 && newPos < mapLabels.length) {
             mapLabels[newPos].setForeground(Color.GREEN); // oyuncunun yeri
+        }
+    }
+
+    private void level2Movement() {
+
+        while (user.currentNode.type == "forward" || user.currentNode.type == "backward") {
+            if (user.currentNode.type == "forward") {
+                Random random = new Random();
+                int forward = random.nextInt(6) + 5;
+                updatePlayerPosition(user.currentNode.index, user.currentNode.index + forward);
+                user.currentNode.index += forward;
+                user.moveForward(forward);
+                System.out.println("İleri atladı: " + forward);
+            } else if (user.currentNode.type == "backward") {
+                Random random = new Random();
+                int backward = random.nextInt(6) + 5;
+                updatePlayerPosition(user.currentNode.index, Math.max(0, user.currentNode.index - backward));
+                user.currentNode.index = Math.max(0, user.currentNode.index - backward);
+                user.moveBackward(backward);
+                System.out.println("Geri atladı: " + backward);
+            }
         }
     }
 
@@ -346,12 +368,12 @@ public class Game extends javax.swing.JFrame {
         if (user.currentNode == null) {
             user.currentNode = map.getNodeAtFirst(dice);
             updatePlayerPosition(-1, user.currentNode.index);
-            user.updateScore(user.currentNode.type);
+            level2Movement();
         } else if (user.currentNode.index + dice <= 29) {
             updatePlayerPosition(user.currentNode.index, user.currentNode.index + dice);
             user.currentNode.index += dice;
             user.moveForward(dice);
-            user.updateScore(user.currentNode.type);
+            level2Movement();
         } else {
 
             ScoreManager.saveScore(user, currentLevel);
@@ -373,9 +395,11 @@ public class Game extends javax.swing.JFrame {
                 this.dispose();  // Oyunu kapat
             }
         }
+
         System.out.println(dice);
         if (user.currentNode != null) {
             System.out.println(user.currentNode.type);
+            user.updateScore(user.currentNode.type);
         }
         System.out.println(user.score);
     }//GEN-LAST:event_jButton1ActionPerformed
