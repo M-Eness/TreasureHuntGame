@@ -23,11 +23,12 @@ public class Game extends javax.swing.JFrame {
     static User user;
     private JLabel[] mapLabels;
     private LinkedListMap map;
+    int currentLevel = 1; // Güncel leveli tutar.
 
     public Game(User user) {
         this.user = user;
         initComponents();
-        
+
         mapLabels = new JLabel[]{
             jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6,
             jLabel7, jLabel8, jLabel9, jLabel10, jLabel11, jLabel12,
@@ -35,7 +36,7 @@ public class Game extends javax.swing.JFrame {
             jLabel19, jLabel20, jLabel21, jLabel22, jLabel23, jLabel24,
             jLabel25, jLabel26, jLabel27, jLabel28, jLabel29, jLabel30
         };
-        
+
         System.out.println(user.username); // Kullanıcı kontrolü
         startGame(user);
     }
@@ -45,7 +46,8 @@ public class Game extends javax.swing.JFrame {
         int i = 0;
         while (current != null && i < mapLabels.length) {
             String text = switch (current.type) {
-                case "treasure" -> "💰 Treasure";
+                case "treasure" ->
+                    "💰 Treasure";
                 case "trap" ->
                     "💀 Trap";
                 case "forward" ->
@@ -62,16 +64,12 @@ public class Game extends javax.swing.JFrame {
     }
 
     private void startGame(User user) {
-        for (int level = 1; level <= 1; level++) {
-            map = new LinkedListMap(30, level);
-            initializeMapDisplay(map, mapLabels);
-            map.displayMap();
-            Random rand = new Random();
-
-            user.resetPosition();
-            user.resetScore();
-            int levelScore = 0;
-        }
+        map = new LinkedListMap(30, currentLevel); // Güncel levele göre harita üretir.
+        initializeMapDisplay(map, mapLabels);
+        map.displayMap();
+        Random rand = new Random();
+        user.resetPosition();
+        user.resetScore();
     }
 
     private void updatePlayerPosition(int oldPos, int newPos) {
@@ -354,10 +352,30 @@ public class Game extends javax.swing.JFrame {
         }
         user.updateScore(user.currentNode.type);
         jLabel31.setText("zar: " + dice);
+        if (user.currentNode.index + dice > 30) {
+
+            ScoreManager.saveScore(user, currentLevel);
+            if (currentLevel >= 3) {
+                JOptionPane.showMessageDialog(null, "Game Over! You completed all levels.");
+                this.dispose();  // Oyunu kapat
+                return;
+            }
+            int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+      
+            if (result == JOptionPane.YES_OPTION) {
+                currentLevel++;
+                startGame(user);
+            } else {
+                JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
+                this.dispose();  // Oyunu kapat
+            }
+        }
         System.out.println(dice);
-        System.out.println(user.currentNode.type);
+        if(user.currentNode != null)
+            System.out.println(user.currentNode.type);
         System.out.println(user.score);
-      // TODO: Level 1 in bittiğini kontrol et. Kullanıcını level 1 skorunu kaydet. Level 2 için devam ekranı olmalı.
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
