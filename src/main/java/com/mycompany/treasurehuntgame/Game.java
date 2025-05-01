@@ -342,17 +342,17 @@ public class Game extends javax.swing.JFrame {
         // TODO add your handling code here:
         Random rand = new Random();
         int dice = rand.nextInt(6) + 1;
+        jLabel31.setText("zar: " + dice);
         if (user.currentNode == null) {
             user.currentNode = map.getNodeAtFirst(dice);
             updatePlayerPosition(-1, user.currentNode.index);
-        } else if (user.currentNode.index <= 30) {
+            user.updateScore(user.currentNode.type);
+        } else if (user.currentNode.index + dice <= 29) {
             updatePlayerPosition(user.currentNode.index, user.currentNode.index + dice);
             user.currentNode.index += dice;
             user.moveForward(dice);
-        }
-        user.updateScore(user.currentNode.type);
-        jLabel31.setText("zar: " + dice);
-        if (user.currentNode.index + dice > 30) {
+            user.updateScore(user.currentNode.type);
+        } else {
 
             ScoreManager.saveScore(user, currentLevel);
             if (currentLevel >= 3) {
@@ -363,9 +363,10 @@ public class Game extends javax.swing.JFrame {
             int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-      
+
             if (result == JOptionPane.YES_OPTION) {
                 currentLevel++;
+                updatePlayerPosition(user.currentNode.index, user.currentNode.index + dice);
                 startGame(user);
             } else {
                 JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
@@ -373,8 +374,9 @@ public class Game extends javax.swing.JFrame {
             }
         }
         System.out.println(dice);
-        if(user.currentNode != null)
+        if (user.currentNode != null) {
             System.out.println(user.currentNode.type);
+        }
         System.out.println(user.score);
     }//GEN-LAST:event_jButton1ActionPerformed
 
