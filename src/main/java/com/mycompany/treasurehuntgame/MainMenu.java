@@ -110,6 +110,10 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        ScoreBoard sb = new ScoreBoard();
+        sb.setVisible(true);
+        sb.setLocationRelativeTo(null);
+        dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
