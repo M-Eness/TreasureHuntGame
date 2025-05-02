@@ -6,15 +6,19 @@ import java.util.Random;
 class MapNode {
 
     int index;
+    int jumpAmount;
     String type; // "treasure", "trap", "empty", "forward", "backward"
     MapNode next;
     MapNode prev;
+    MapNode jump;
 
     public MapNode(int index, String type) {
         this.index = index;
+        this.jumpAmount = 0;
         this.type = type;
         this.next = null;
         this.prev = null;
+        this.jump = null;
     }
 
     @Override
@@ -36,6 +40,38 @@ class LinkedListMap {
         this.head = generateMap(size, level);
     }
 
+    private void isSpecial(MapNode node) {
+        if (node.type == "forward" || node.type == "backward") {
+            Random random = new Random();
+            node.jumpAmount = random.nextInt(7) + 1;
+        }
+    }
+
+    private void generateMapAdvanced(MapNode head) {
+        MapNode dummy = head;
+        while (dummy != null) {
+            if (dummy.type == "forward") {
+                MapNode dummy2 = dummy;
+                for (int i = 0; i < dummy.jumpAmount; i++) {
+                    if (dummy2.next != null) {
+                        dummy2 = dummy2.next;
+                    }
+                }
+                dummy.jump = dummy2;
+            }
+            if (dummy.type == "backward") {
+                MapNode dummy2 = dummy;
+                for (int i = 0; i < dummy.jumpAmount; i++) {
+                    if (dummy2.prev != null) {
+                        dummy2 = dummy2.prev;
+                    }
+                }
+                dummy.jump = dummy2;
+            }
+            dummy = dummy.next;
+        }
+    }
+
     private MapNode generateMap(int size, int level) {
         String random = randomType(level);
         int forward = 0;
@@ -44,12 +80,14 @@ class LinkedListMap {
         while (random == "backward") {
             random = randomType(level);
         }
-        MapNode dummy = new MapNode(0, random);
+        MapNode head = new MapNode(0, random);
+        isSpecial(head);
+
         if (random == "forward") {
             forward++;
         }
 
-        MapNode current = dummy;
+        MapNode current = head;
         for (int i = 1; i < size; i++) {
             String randomType = randomType(level);
             if (randomType == "forward") {
@@ -62,12 +100,16 @@ class LinkedListMap {
             }
 
             MapNode newNode = new MapNode(i, randomType);
+            isSpecial(newNode);
             current.next = newNode;
             newNode.prev = current;
             current = newNode;
         }
         tail = current;
-        return dummy;
+        if (level > 1) {
+            generateMapAdvanced(head);
+        }
+        return head;
     }
 
     private String randomType(int level) {

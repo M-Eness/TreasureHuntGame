@@ -104,29 +104,12 @@ public class Game extends javax.swing.JFrame {
     }
 
     private void level2Movement() {
-        Random random = new Random();
         while (user.currentNode != null && (user.currentNode.type == "forward" || user.currentNode.type == "backward")) {
-            int oldIndex = user.currentNode.index;
-            if (user.currentNode.type.equals("forward")) {
-                int forward = random.nextInt(6) + 5;
-                int tentativeIndex = user.currentNode.index + forward;
-
-                if (tentativeIndex > 29) {
-                    System.out.println("Level is over");
-                    isOver();
-                    return; // level2Movement()’ten çık
-                }
-
-                user.currentNode.index = tentativeIndex;
-                user.moveForward(forward);
-                updatePlayerPosition(oldIndex, user.currentNode.index);
-                System.out.println("İleri atladı: " + forward);
-
-            } else if (user.currentNode.type == "backward") {
-                int backward = random.nextInt(6) + 5;
-                user.moveBackward(backward);
-                updatePlayerPosition(oldIndex, Math.max(0, user.currentNode.index));
-                System.out.println("Geri atladı: " + backward);
+            if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle bera
+                isOver();
+            } else {
+                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index);
+                user.currentNode = user.currentNode.jump;
             }
         }
     }
@@ -280,7 +263,7 @@ public class Game extends javax.swing.JFrame {
         } else {
             isOver();
         }
-        if (currentLevel == 2) {
+        if (currentLevel >= 2) {
             level2Movement();
         }
         if (user.currentNode != null) {
