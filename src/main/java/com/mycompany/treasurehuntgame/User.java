@@ -55,15 +55,13 @@ public class User extends javax.swing.JFrame {
 
     public void moveForward(int steps) {
         for (int i = 0; i < steps && currentNode != null && currentNode.next != null; i++) {
-            currentNode = currentNode.next;
-          
+            currentNode = currentNode.next;        
         }
     }
 
     public void moveBackward(int steps) {
         for (int i = 0; i < steps && currentNode != null && currentNode.prev != null; i++) {
             currentNode = currentNode.prev;
-           
         }
     }
 
@@ -157,8 +155,9 @@ public class User extends javax.swing.JFrame {
         } else {
             username = jTextField1.getText();
             Game game = new Game(this);
-            game.setVisible(true);
+            game.setSize(1100, 700);
             game.setLocationRelativeTo(null);
+            game.setVisible(true);
             this.dispose();
         }
 

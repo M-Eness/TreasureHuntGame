@@ -82,22 +82,50 @@ public class Game extends javax.swing.JFrame {
         }
     }
 
-    private void level2Movement() {
+    private void isOver() {
+        ScoreManager.saveScore(user, currentLevel);
+        if (currentLevel >= 3) {
+            JOptionPane.showMessageDialog(null, "Game Over! You completed all levels.");
+            this.dispose();  // Oyunu kapat
+            return;
+        }
+        int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
 
-        while (user.currentNode.type == "forward" || user.currentNode.type == "backward") {
-            if (user.currentNode.type == "forward") {
-                Random random = new Random();
+        if (result == JOptionPane.YES_OPTION) {
+            currentLevel++;
+            mapLabels[user.currentNode.index].setForeground(null);
+            startGame(user);
+        } else {
+            JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
+            this.dispose();  // Oyunu kapat
+        }
+    }
+
+    private void level2Movement() {
+        Random random = new Random();
+        while (user.currentNode != null && (user.currentNode.type == "forward" || user.currentNode.type == "backward")) {
+            int oldIndex = user.currentNode.index;
+            if (user.currentNode.type.equals("forward")) {
                 int forward = random.nextInt(6) + 5;
-                updatePlayerPosition(user.currentNode.index, user.currentNode.index + forward);
-                user.currentNode.index += forward;
+                int tentativeIndex = user.currentNode.index + forward;
+
+                if (tentativeIndex > 29) {
+                    System.out.println("Level is over");
+                    isOver();
+                    return; // level2Movement()’ten çık
+                }
+
+                user.currentNode.index = tentativeIndex;
                 user.moveForward(forward);
+                updatePlayerPosition(oldIndex, user.currentNode.index);
                 System.out.println("İleri atladı: " + forward);
+
             } else if (user.currentNode.type == "backward") {
-                Random random = new Random();
                 int backward = random.nextInt(6) + 5;
-                updatePlayerPosition(user.currentNode.index, Math.max(0, user.currentNode.index - backward));
-                user.currentNode.index = Math.max(0, user.currentNode.index - backward);
                 user.moveBackward(backward);
+                updatePlayerPosition(oldIndex, Math.max(0, user.currentNode.index));
                 System.out.println("Geri atladı: " + backward);
             }
         }
@@ -112,9 +140,6 @@ public class Game extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelBack = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jLabel31 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -141,221 +166,94 @@ public class Game extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1100, 700));
+        getContentPane().setLayout(null);
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(330, 620, 60, 40);
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(410, 580, 50, 30);
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(500, 560, 42, 17);
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(590, 570, 60, 30);
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(690, 590, 42, 17);
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(780, 570, 70, 40);
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(880, 540, 70, 40);
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(900, 470, 60, 30);
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(830, 420, 60, 30);
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(750, 400, 50, 40);
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(650, 420, 60, 30);
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(570, 410, 50, 40);
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(470, 390, 60, 40);
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(390, 360, 50, 40);
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(300, 340, 60, 40);
+        getContentPane().add(jLabel16);
+        jLabel16.setBounds(200, 320, 70, 40);
+        getContentPane().add(jLabel17);
+        jLabel17.setBounds(130, 280, 50, 40);
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(120, 200, 60, 40);
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(180, 140, 50, 40);
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(250, 100, 60, 40);
+        getContentPane().add(jLabel21);
+        jLabel21.setBounds(330, 100, 60, 40);
+        getContentPane().add(jLabel22);
+        jLabel22.setBounds(430, 120, 60, 40);
+        getContentPane().add(jLabel23);
+        jLabel23.setBounds(470, 190, 60, 40);
+        getContentPane().add(jLabel24);
+        jLabel24.setBounds(460, 260, 60, 40);
+        getContentPane().add(jLabel25);
+        jLabel25.setBounds(540, 300, 60, 40);
+        getContentPane().add(jLabel26);
+        jLabel26.setBounds(660, 300, 70, 40);
+        getContentPane().add(jLabel27);
+        jLabel27.setBounds(750, 260, 70, 40);
+        getContentPane().add(jLabel28);
+        jLabel28.setBounds(830, 210, 70, 40);
+        getContentPane().add(jLabel29);
+        jLabel29.setBounds(910, 150, 60, 40);
+        getContentPane().add(jLabel30);
+        jLabel30.setBounds(960, 70, 70, 60);
 
-        jPanelBack.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dice.png"))); // NOI18N
+        getContentPane().add(jLabel32);
+        jLabel32.setBounds(0, 0, 150, 120);
 
-        jButton1.setText("Zar at");
+        jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
+        getContentPane().add(jLabel31);
+        jLabel31.setBounds(0, 0, 1100, 710);
+
+        jButton1.setContentAreaFilled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("jLabel1");
-
-        jLabel2.setText("jLabel1");
-
-        jLabel3.setText("jLabel1");
-
-        jLabel4.setText("jLabel1");
-
-        jLabel5.setText("jLabel1");
-
-        jLabel6.setText("jLabel1");
-
-        jLabel7.setText("jLabel1");
-
-        jLabel8.setText("jLabel1");
-
-        jLabel9.setText("jLabel1");
-
-        jLabel10.setText("jLabel1");
-
-        jLabel11.setText("jLabel1");
-
-        jLabel12.setText("jLabel1");
-
-        jLabel13.setText("jLabel1");
-
-        jLabel14.setText("jLabel1");
-
-        jLabel15.setText("jLabel1");
-
-        jLabel16.setText("jLabel1");
-
-        jLabel17.setText("jLabel1");
-
-        jLabel18.setText("jLabel1");
-
-        jLabel19.setText("jLabel1");
-
-        jLabel20.setText("jLabel1");
-
-        jLabel21.setText("jLabel1");
-
-        jLabel22.setText("jLabel1");
-
-        jLabel23.setText("jLabel1");
-
-        jLabel24.setText("jLabel1");
-
-        jLabel25.setText("jLabel1");
-
-        jLabel26.setText("jLabel1");
-
-        jLabel28.setText("jLabel1");
-
-        jLabel29.setText("jLabel1");
-
-        jLabel30.setText("jLabel1");
-
-        jLabel27.setText("jLabel1");
-
-        javax.swing.GroupLayout jPanelBackLayout = new javax.swing.GroupLayout(jPanelBack);
-        jPanelBack.setLayout(jPanelBackLayout);
-        jPanelBackLayout.setHorizontalGroup(
-            jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBackLayout.createSequentialGroup()
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelBackLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton1))
-                    .addGroup(jPanelBackLayout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanelBackLayout.createSequentialGroup()
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanelBackLayout.createSequentialGroup()
-                                        .addComponent(jLabel24)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel23))
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel14))
-                                .addGap(38, 38, 38)
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addGroup(jPanelBackLayout.createSequentialGroup()
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBackLayout.createSequentialGroup()
-                                        .addGap(8, 8, 8)
-                                        .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(jPanelBackLayout.createSequentialGroup()
-                                                    .addComponent(jLabel31)
-                                                    .addGap(220, 220, 220))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelBackLayout.createSequentialGroup()
-                                                    .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jLabel12)
-                                                        .addComponent(jLabel1)
-                                                        .addComponent(jLabel13))
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                            .addGroup(jPanelBackLayout.createSequentialGroup()
-                                                .addComponent(jLabel26)
-                                                .addGap(38, 38, 38))))
-                                    .addGroup(jPanelBackLayout.createSequentialGroup()
-                                        .addComponent(jLabel25)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel15)
-                                    .addComponent(jLabel27))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-                        .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel16)
-                            .addGroup(jPanelBackLayout.createSequentialGroup()
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel21)
-                                    .addComponent(jLabel28))
-                                .addGap(36, 36, 36)
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17)
-                                    .addComponent(jLabel20)
-                                    .addComponent(jLabel29))
-                                .addGap(75, 75, 75)
-                                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel18)
-                                    .addComponent(jLabel19)
-                                    .addComponent(jLabel30))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)))
-                .addGap(91, 91, 91))
-        );
-        jPanelBackLayout.setVerticalGroup(
-            jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelBackLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel31))
-                .addGap(65, 65, 65)
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(49, 49, 49)
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12))
-                .addGap(52, 52, 52)
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel19))
-                .addGap(34, 34, 34)
-                .addGroup(jPanelBackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel28)
-                    .addComponent(jLabel30)
-                    .addComponent(jLabel29)
-                    .addComponent(jLabel27))
-                .addContainerGap(91, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanelBack, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(148, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        getContentPane().add(jButton1);
+        jButton1.setBounds(50, 0, 90, 120);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -364,44 +262,32 @@ public class Game extends javax.swing.JFrame {
         // TODO add your handling code here:
         Random rand = new Random();
         int dice = rand.nextInt(6) + 1;
+        System.out.println("Zar: " + dice);
+        int oldIndex = -1;
+
+        if (user.currentNode != null) {
+            oldIndex = user.currentNode.index;
+        }
+
         jLabel31.setText("zar: " + dice);
         if (user.currentNode == null) {
             user.currentNode = map.getNodeAtFirst(dice);
-            updatePlayerPosition(-1, user.currentNode.index);
-            level2Movement();
+            updatePlayerPosition(oldIndex, user.currentNode.index);
+
         } else if (user.currentNode.index + dice <= 29) {
-            updatePlayerPosition(user.currentNode.index, user.currentNode.index + dice);
-            user.currentNode.index += dice;
             user.moveForward(dice);
-            level2Movement();
+            updatePlayerPosition(oldIndex, user.currentNode.index);
         } else {
-
-            ScoreManager.saveScore(user, currentLevel);
-            if (currentLevel >= 3) {
-                JOptionPane.showMessageDialog(null, "Game Over! You completed all levels.");
-                this.dispose();  // Oyunu kapat
-                return;
-            }
-            int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if (result == JOptionPane.YES_OPTION) {
-                currentLevel++;
-                updatePlayerPosition(user.currentNode.index, user.currentNode.index + dice);
-                startGame(user);
-            } else {
-                JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
-                this.dispose();  // Oyunu kapat
-            }
+            isOver();
         }
-
-        System.out.println(dice);
+        if (currentLevel == 2) {
+            level2Movement();
+        }
         if (user.currentNode != null) {
             System.out.println(user.currentNode.type);
             user.updateScore(user.currentNode.type);
         }
-        System.out.println(user.score);
+        System.out.println("Score: " + user.score);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -418,16 +304,24 @@ public class Game extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Game.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Game.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Game.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Game.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -466,12 +360,12 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanelBack;
     // End of variables declaration//GEN-END:variables
 }

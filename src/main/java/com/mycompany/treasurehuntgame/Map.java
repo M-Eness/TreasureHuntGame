@@ -57,7 +57,7 @@ class LinkedListMap {
             } else if (randomType == "backward") {
                 backward++;
             }
-            while ((forward > 5 && randomType == "forward") || (backward > 5 && randomType == "backward")) {
+            while ((forward > 15 && randomType == "forward") || (backward > 10 && randomType == "backward")) {
                 randomType = randomType(level);
             }
 
