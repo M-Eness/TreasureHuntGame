@@ -25,7 +25,6 @@ public class Game extends javax.swing.JFrame {
     public JLabel[] mapLabels;
     public LinkedListMap map;
     int currentLevel = 3; // Güncel leveli tutar.
-    
 
     ImageIcon forwardIcon = new ImageIcon(getClass().getResource("/images/forward_icon.png"));
     ImageIcon backwardIcon = new ImageIcon(getClass().getResource("/images/backward_icon.png"));
@@ -47,7 +46,6 @@ public class Game extends javax.swing.JFrame {
             jLabel19, jLabel20, jLabel21, jLabel22, jLabel23, jLabel24,
             jLabel25, jLabel26, jLabel27, jLabel28, jLabel29, jLabel30
         };
-
         System.out.println(user.username); // Kullanıcı kontrolü
         startGame(user);
     }
@@ -89,6 +87,19 @@ public class Game extends javax.swing.JFrame {
         Random rand = new Random();
         user.resetPosition();
         user.resetScore();
+        // Poison ve Heal Göstergeleri Başlangıçta Kapalı
+        System.out.println(currentLevel);
+        if (currentLevel != 3) {
+            jLabel35.setVisible(false);
+            jLabel36.setVisible(false);
+            jLabel37.setVisible(false);
+            jLabel38.setVisible(false);
+        } else {
+            jLabel35.setVisible(true);
+            jLabel36.setVisible(true);
+            jLabel37.setVisible(true);
+            jLabel38.setVisible(true);
+        }
     }
 
     private void updatePlayerPosition(int oldPos, int newPos, String oldType) {
@@ -206,6 +217,10 @@ public class Game extends javax.swing.JFrame {
         diceLabel = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         scoreLabel = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -297,6 +312,28 @@ public class Game extends javax.swing.JFrame {
         getContentPane().add(scoreLabel);
         scoreLabel.setBounds(560, 20, 80, 50);
 
+        jLabel35.setFont(new java.awt.Font("Kokonor", 0, 15)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel35.setText("Heal:");
+        getContentPane().add(jLabel35);
+        jLabel35.setBounds(30, 180, 34, 26);
+
+        jLabel36.setFont(new java.awt.Font("Kokonor", 0, 15)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(jLabel36);
+        jLabel36.setBounds(70, 180, 49, 20);
+
+        jLabel37.setFont(new java.awt.Font("Kokonor", 0, 15)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel37.setText("Poison:");
+        getContentPane().add(jLabel37);
+        jLabel37.setBounds(30, 210, 49, 17);
+
+        jLabel38.setFont(new java.awt.Font("Kokonor", 0, 15)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(jLabel38);
+        jLabel38.setBounds(80, 210, 49, 17);
+
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
         getContentPane().add(jLabel31);
         jLabel31.setBounds(0, 0, 1100, 710);
@@ -342,28 +379,31 @@ public class Game extends javax.swing.JFrame {
         }
         if (currentLevel == 3) {
             advancedLevelMovement();
-            if (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box") {
+            if ((user.currentNode != null) && (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box")) {
                 // Node bunlardan biri ise özellik alındıktan sonra Node empty olacak
                 if (user.currentNode.type == "poison") {
                     user.poison++;
                 } else if (user.currentNode.type == "heal") {
                     user.heal++;
-                }else if (user.currentNode.type == "mystery_box"){
+                } else if (user.currentNode.type == "mystery_box") {
                     user.updateScore(user.currentNode.type);
                 }
 
                 System.out.println("You get " + user.currentNode.type);
                 System.out.println("Poison " + user.poison);
                 System.out.println("Heal " + user.heal);
+                jLabel36.setText(String.valueOf(user.heal));
+                jLabel38.setText(String.valueOf(user.poison));
                 user.currentNode.type = "empty";
             }
-            if (user.currentNode != null) {
-                System.out.println(user.currentNode.type);
-                user.updateScore(user.currentNode.type);
-            }
-            scoreLabel.setText(String.valueOf(user.score));
-            System.out.println("Score: " + user.score);
         }
+        if (user.currentNode != null) {
+            System.out.println(user.currentNode.type);
+            user.updateScore(user.currentNode.type);
+        }
+        scoreLabel.setText(String.valueOf(user.score));
+        System.out.println("Score: " + user.score);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -440,6 +480,10 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
