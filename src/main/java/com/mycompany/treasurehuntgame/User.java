@@ -22,6 +22,8 @@ public class User extends javax.swing.JFrame {
     String username;
     MapNode currentNode;
     int score;
+    int poison = 0;
+    int heal = 0;
 
     public User() {
         initComponents();
@@ -29,17 +31,49 @@ public class User extends javax.swing.JFrame {
         this.currentNode = null;
         this.score = 0;
         jTextField1.setText("");
-        jTextField1.setBackground(new java.awt.Color(0,0,0,1));
+        jTextField1.setBackground(new java.awt.Color(0, 0, 0, 1));
     }
 
     public void updateScore(String type) {
+
         switch (type) {
             case "treasure":
-                score += 10;
+                if (poison > 0) { // Elimizde poison varsa puan alamıyoruz.
+                    poison--;
+                    System.out.println("Elinizde poison olduğu için puan alamadınız!!");
+                } else {
+                    score += 10;
+                }
                 break;
             case "trap":
-                score -= 5;
+                if (heal > 0) { // Elimizde heal varsa tuzaktan etkilenmiyoruz.
+                    heal--;
+                    System.out.println("Elinizde heal olduğu için tuzaktan etkilenmediniz!!");
+                } else {
+                    score -= 5;
+                }
                 break;
+            case "mystery_box":
+                Random random = new Random();
+                int feature = random.nextInt(2);
+                if (feature == 0) { // Mystery Box eksi puan verecek.
+                    if (heal == 0) { // Elimizde heal yoksa tuzaktan etkileniyoruz.
+                        score -= 10;
+                        System.out.println("You get -10 points from mystery box");
+                    } else {
+                        heal--;
+                        System.out.println("Elinizde heal olduğu için mystery box tuzağından etkilenmediniz!!");
+                    }
+                } else if (feature == 1) { // Mystery Box artı puan verecek.
+                    if (poison == 0) {// Elimizde poison yoksa puan alıyoruz.
+                        score += 20;
+                        System.out.println("You get 20 points from mystery box");
+                    } else {
+                        poison--;
+                        System.out.println("Elinizde poison olduğu için mystery boxtan puan alamadınız!!");
+                    }
+                }
+
         }
     }
 

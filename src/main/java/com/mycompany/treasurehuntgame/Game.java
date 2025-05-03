@@ -24,13 +24,17 @@ public class Game extends javax.swing.JFrame {
     static User user;
     public JLabel[] mapLabels;
     public LinkedListMap map;
-    int currentLevel = 1; // Güncel leveli tutar.
+    int currentLevel = 3; // Güncel leveli tutar.
+    
 
     ImageIcon forwardIcon = new ImageIcon(getClass().getResource("/images/forward_icon.png"));
     ImageIcon backwardIcon = new ImageIcon(getClass().getResource("/images/backward_icon.png"));
     ImageIcon trapIcon = new ImageIcon(getClass().getResource("/images/trap.png"));
     ImageIcon treasureIcon = new ImageIcon(getClass().getResource("/images/treasure_chest.png"));
     ImageIcon characterIcon = new ImageIcon(getClass().getResource("/images/character.png"));
+    ImageIcon poisonIcon = new ImageIcon(getClass().getResource("/images/poison.png"));
+    ImageIcon healIcon = new ImageIcon(getClass().getResource("/images/heal.png"));
+    ImageIcon mysteryIcon = new ImageIcon(getClass().getResource("/images/mystery_box.png"));
 
     public Game(User user) {
         this.user = user;
@@ -61,6 +65,12 @@ public class Game extends javax.swing.JFrame {
                     forwardIcon;
                 case "backward" ->
                     backwardIcon;
+                case "poison" ->
+                    poisonIcon;
+                case "heal" ->
+                    healIcon;
+                case "mystery_box" ->
+                    mysteryIcon;
                 default ->
                     null;
             };
@@ -81,9 +91,9 @@ public class Game extends javax.swing.JFrame {
         user.resetScore();
     }
 
-    private void updatePlayerPosition(int oldPos, int newPos, String type) {
+    private void updatePlayerPosition(int oldPos, int newPos, String oldType) {
         System.out.println("old: " + oldPos + " new: " + newPos);
-        ImageIcon icon = switch (type) {
+        ImageIcon icon = switch (oldType) {
             case "treasure" ->
                 treasureIcon;
             case "trap" ->
@@ -92,6 +102,12 @@ public class Game extends javax.swing.JFrame {
                 forwardIcon;
             case "backward" ->
                 backwardIcon;
+            case "poison" ->
+                poisonIcon;
+            case "heal" ->
+                healIcon;
+            case "mystery_box" ->
+                mysteryIcon;
             default ->
                 null;
         };
@@ -133,7 +149,7 @@ public class Game extends javax.swing.JFrame {
 //        }
     }
 
-    private void level2Movement() {
+    private void advancedLevelMovement() {
         while (user.currentNode != null && (user.currentNode.type == "forward" || user.currentNode.type == "backward")) {
             if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle beraber hesaplanıyor.
                 isOver();
@@ -141,12 +157,9 @@ public class Game extends javax.swing.JFrame {
                 user.currentNode.type = "empty";
                 updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
                 user.currentNode = user.currentNode.jump;
-//                MapNode temp = user.currentNode;
-//                user.currentNode = user.currentNode.jump;
-//                temp.type = "empty";
-//                updatePlayerPosition(temp.index, user.currentNode.index, temp.type);
             }
         }
+
     }
 
     /**
@@ -201,7 +214,7 @@ public class Game extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(330, 600, 70, 70);
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(400, 560, 70, 60);
+        jLabel2.setBounds(400, 560, 80, 70);
         getContentPane().add(jLabel3);
         jLabel3.setBounds(490, 530, 70, 80);
         getContentPane().add(jLabel4);
@@ -324,15 +337,33 @@ public class Game extends javax.swing.JFrame {
         } else {
             isOver();
         }
-        if (currentLevel >= 2) {
-            level2Movement();
+        if (currentLevel == 2) {
+            advancedLevelMovement();
         }
-        if (user.currentNode != null) {
-            System.out.println(user.currentNode.type);
-            user.updateScore(user.currentNode.type);
+        if (currentLevel == 3) {
+            advancedLevelMovement();
+            if (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box") {
+                // Node bunlardan biri ise özellik alındıktan sonra Node empty olacak
+                if (user.currentNode.type == "poison") {
+                    user.poison++;
+                } else if (user.currentNode.type == "heal") {
+                    user.heal++;
+                }else if (user.currentNode.type == "mystery_box"){
+                    user.updateScore(user.currentNode.type);
+                }
+
+                System.out.println("You get " + user.currentNode.type);
+                System.out.println("Poison " + user.poison);
+                System.out.println("Heal " + user.heal);
+                user.currentNode.type = "empty";
+            }
+            if (user.currentNode != null) {
+                System.out.println(user.currentNode.type);
+                user.updateScore(user.currentNode.type);
+            }
+            scoreLabel.setText(String.valueOf(user.score));
+            System.out.println("Score: " + user.score);
         }
-        scoreLabel.setText(String.valueOf(user.score));
-        System.out.println("Score: " + user.score);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

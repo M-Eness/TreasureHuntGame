@@ -76,6 +76,7 @@ class LinkedListMap {
         String random = randomType(level);
         int forward = 0;
         int backward = 0;
+        int mystery_box = 0;
 
         while (random == "backward") {
             random = randomType(level);
@@ -94,10 +95,14 @@ class LinkedListMap {
                 forward++;
             } else if (randomType == "backward") {
                 backward++;
+            }else if (randomType == "mystery_box"){
+                mystery_box++;
             }
-            while ((forward > 15 && randomType == "forward") || (backward > 10 && randomType == "backward")) {
+            while ((forward > 15 && randomType == "forward") || (backward > 10 && randomType == "backward") 
+                    || mystery_box > 10 && randomType == "mystery_box") {
                 randomType = randomType(level);
             }
+            
 
             MapNode newNode = new MapNode(i, randomType);
             isSpecial(newNode);
@@ -119,7 +124,7 @@ class LinkedListMap {
         } else if (level == 2) {
             types = new String[]{"treasure", "trap", "empty", "forward", "backward"};
         } else {
-            types = new String[]{"treasure", "trap", "empty", "forward", "backward"};
+            types = new String[]{"treasure", "trap", "empty", "forward", "backward", "mystery_box", "poison", "heal"};
         }
         return types[rand.nextInt(types.length)];
     }
