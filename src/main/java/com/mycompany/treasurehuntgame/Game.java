@@ -6,6 +6,7 @@ package com.mycompany.treasurehuntgame;
 
 import java.awt.Color;
 import java.util.Random;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,6 +25,12 @@ public class Game extends javax.swing.JFrame {
     private JLabel[] mapLabels;
     private LinkedListMap map;
     int currentLevel = 1; // Güncel leveli tutar.
+
+    ImageIcon forwardIcon = new ImageIcon(getClass().getResource("/images/forward_icon.png"));
+    ImageIcon backwardIcon = new ImageIcon(getClass().getResource("/images/backward_icon.png"));
+    ImageIcon trapIcon = new ImageIcon(getClass().getResource("/images/trap.png"));
+    ImageIcon treasureIcon = new ImageIcon(getClass().getResource("/images/treasure_chest.png"));
+    ImageIcon characterIcon = new ImageIcon(getClass().getResource("/images/character.png"));
 
     public Game(User user) {
         this.user = user;
@@ -45,19 +52,19 @@ public class Game extends javax.swing.JFrame {
         MapNode current = map.head;
         int i = 0;
         while (current != null && i < mapLabels.length) {
-            String text = switch (current.type) {
+            ImageIcon icon = switch (current.type) {
                 case "treasure" ->
-                    "💰 Treasure";
+                    treasureIcon;
                 case "trap" ->
-                    "💀 Trap";
+                    trapIcon;
                 case "forward" ->
-                    "➡️ Forward";
+                    forwardIcon;
                 case "backward" ->
-                    "⬅️ Backward";
+                    backwardIcon;
                 default ->
-                    "🕳️ Empty";
+                    null;
             };
-            mapLabels[i].setText(text);
+            mapLabels[i].setIcon(icon);
             current = current.next;
             i++;
         }
@@ -67,18 +74,32 @@ public class Game extends javax.swing.JFrame {
         map = new LinkedListMap(30, currentLevel); // Güncel levele göre harita üretir.
         initializeMapDisplay(map, mapLabels);
         map.displayMap();
+        System.out.println(getClass().getResource("/images/forward_icon.png"));
         Random rand = new Random();
         user.resetPosition();
         user.resetScore();
     }
 
-    private void updatePlayerPosition(int oldPos, int newPos) {
+    private void updatePlayerPosition(int oldPos, int newPos, String type) {
         System.out.println("old: " + oldPos + " new: " + newPos);
+        ImageIcon icon = switch (type) {
+            case "treasure" ->
+                treasureIcon;
+            case "trap" ->
+                trapIcon;
+            case "forward" ->
+                forwardIcon;
+            case "backward" ->
+                backwardIcon;
+            default ->
+                null;
+        };
+        
         if (oldPos >= 0 && oldPos < mapLabels.length) {
-            mapLabels[oldPos].setForeground(null); // eski rengi sıfırla
+            mapLabels[oldPos].setIcon(icon); // eski iconu yerine koy
         }
         if (newPos >= 0 && newPos < mapLabels.length) {
-            mapLabels[newPos].setForeground(Color.GREEN); // oyuncunun yeri
+            mapLabels[newPos].setIcon(characterIcon); // oyuncunun yeri
         }
     }
 
@@ -96,6 +117,7 @@ public class Game extends javax.swing.JFrame {
         if (result == JOptionPane.YES_OPTION) {
             currentLevel++;
             mapLabels[user.currentNode.index].setForeground(null);
+            diceLabel.setText("0");
             startGame(user);
         } else {
             JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
@@ -105,11 +127,13 @@ public class Game extends javax.swing.JFrame {
 
     private void level2Movement() {
         while (user.currentNode != null && (user.currentNode.type == "forward" || user.currentNode.type == "backward")) {
-            if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle bera
+            if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle beraber hesaplanıyor.
                 isOver();
             } else {
-                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index);
+                MapNode temp = user.currentNode;
                 user.currentNode = user.currentNode.jump;
+                temp.type = "empty";
+                updatePlayerPosition(temp.index, user.currentNode.index, temp.type);
             }
         }
     }
@@ -153,77 +177,106 @@ public class Game extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
+        diceLabel = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        scoreLabel = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1100, 700));
         getContentPane().setLayout(null);
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(330, 620, 60, 40);
+        jLabel1.setBounds(330, 600, 70, 70);
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(410, 580, 50, 30);
+        jLabel2.setBounds(400, 560, 70, 60);
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(500, 560, 42, 17);
+        jLabel3.setBounds(490, 530, 70, 80);
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(590, 570, 60, 30);
+        jLabel4.setBounds(580, 540, 100, 80);
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(690, 590, 42, 17);
+        jLabel5.setBounds(670, 550, 100, 80);
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(780, 570, 70, 40);
+        jLabel6.setBounds(780, 560, 90, 70);
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(880, 540, 70, 40);
+        jLabel7.setBounds(880, 520, 70, 80);
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(900, 470, 60, 30);
+        jLabel8.setBounds(890, 450, 80, 70);
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(830, 420, 60, 30);
+        jLabel9.setBounds(820, 400, 70, 70);
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(750, 400, 50, 40);
+        jLabel10.setBounds(730, 380, 80, 80);
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(650, 420, 60, 30);
+        jLabel11.setBounds(640, 390, 90, 80);
         getContentPane().add(jLabel12);
-        jLabel12.setBounds(570, 410, 50, 40);
+        jLabel12.setBounds(560, 380, 80, 80);
         getContentPane().add(jLabel13);
-        jLabel13.setBounds(470, 390, 60, 40);
+        jLabel13.setBounds(470, 380, 80, 70);
         getContentPane().add(jLabel14);
-        jLabel14.setBounds(390, 360, 50, 40);
+        jLabel14.setBounds(380, 340, 80, 80);
         getContentPane().add(jLabel15);
-        jLabel15.setBounds(300, 340, 60, 40);
+        jLabel15.setBounds(290, 320, 80, 80);
         getContentPane().add(jLabel16);
-        jLabel16.setBounds(200, 320, 70, 40);
+        jLabel16.setBounds(200, 300, 90, 80);
         getContentPane().add(jLabel17);
-        jLabel17.setBounds(130, 280, 50, 40);
+        jLabel17.setBounds(130, 270, 90, 60);
         getContentPane().add(jLabel18);
-        jLabel18.setBounds(120, 200, 60, 40);
+        jLabel18.setBounds(120, 190, 80, 70);
         getContentPane().add(jLabel19);
-        jLabel19.setBounds(180, 140, 50, 40);
+        jLabel19.setBounds(170, 110, 90, 80);
         getContentPane().add(jLabel20);
-        jLabel20.setBounds(250, 100, 60, 40);
+        jLabel20.setBounds(240, 80, 80, 80);
         getContentPane().add(jLabel21);
-        jLabel21.setBounds(330, 100, 60, 40);
+        jLabel21.setBounds(330, 80, 80, 80);
         getContentPane().add(jLabel22);
-        jLabel22.setBounds(430, 120, 60, 40);
+        jLabel22.setBounds(420, 100, 90, 80);
         getContentPane().add(jLabel23);
-        jLabel23.setBounds(470, 190, 60, 40);
+        jLabel23.setBounds(470, 160, 80, 90);
         getContentPane().add(jLabel24);
-        jLabel24.setBounds(460, 260, 60, 40);
+        jLabel24.setBounds(460, 240, 90, 80);
         getContentPane().add(jLabel25);
-        jLabel25.setBounds(540, 300, 60, 40);
+        jLabel25.setBounds(530, 280, 100, 70);
         getContentPane().add(jLabel26);
-        jLabel26.setBounds(660, 300, 70, 40);
+        jLabel26.setBounds(660, 280, 90, 80);
         getContentPane().add(jLabel27);
-        jLabel27.setBounds(750, 260, 70, 40);
+        jLabel27.setBounds(750, 240, 90, 80);
         getContentPane().add(jLabel28);
-        jLabel28.setBounds(830, 210, 70, 40);
+        jLabel28.setBounds(820, 180, 80, 90);
         getContentPane().add(jLabel29);
-        jLabel29.setBounds(910, 150, 60, 40);
+        jLabel29.setBounds(900, 120, 90, 90);
         getContentPane().add(jLabel30);
-        jLabel30.setBounds(960, 70, 70, 60);
+        jLabel30.setBounds(960, 60, 80, 70);
+
+        jLabel33.setFont(new java.awt.Font("Kokonor", 1, 18)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel33.setText("Dice: ");
+        getContentPane().add(jLabel33);
+        jLabel33.setBounds(30, 120, 44, 40);
 
         jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dice.png"))); // NOI18N
         getContentPane().add(jLabel32);
         jLabel32.setBounds(0, 0, 150, 120);
+
+        diceLabel.setFont(new java.awt.Font("Kokonor", 0, 18)); // NOI18N
+        getContentPane().add(diceLabel);
+        diceLabel.setBounds(80, 130, 60, 20);
+
+        jLabel34.setFont(new java.awt.Font("Kokonor", 1, 30)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel34.setText("Score: ");
+        getContentPane().add(jLabel34);
+        jLabel34.setBounds(470, 20, 80, 51);
+
+        scoreLabel.setFont(new java.awt.Font("Kokonor", 0, 30)); // NOI18N
+        scoreLabel.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(scoreLabel);
+        scoreLabel.setBounds(560, 20, 80, 50);
+
+        jLabel35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/character.png"))); // NOI18N
+        getContentPane().add(jLabel35);
+        jLabel35.setBounds(180, 30, 80, 90);
 
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
         getContentPane().add(jLabel31);
@@ -245,6 +298,7 @@ public class Game extends javax.swing.JFrame {
         // TODO add your handling code here:
         Random rand = new Random();
         int dice = rand.nextInt(6) + 1;
+        diceLabel.setText(String.valueOf(dice));
         System.out.println("Zar: " + dice);
         int oldIndex = -1;
 
@@ -255,11 +309,12 @@ public class Game extends javax.swing.JFrame {
         jLabel31.setText("zar: " + dice);
         if (user.currentNode == null) {
             user.currentNode = map.getNodeAtFirst(dice);
-            updatePlayerPosition(oldIndex, user.currentNode.index);
+            updatePlayerPosition(oldIndex, user.currentNode.index, "");
 
         } else if (user.currentNode.index + dice <= 29) {
+            String oldType = user.currentNode.type;
             user.moveForward(dice);
-            updatePlayerPosition(oldIndex, user.currentNode.index);
+            updatePlayerPosition(oldIndex, user.currentNode.index, oldType);
         } else {
             isOver();
         }
@@ -270,6 +325,7 @@ public class Game extends javax.swing.JFrame {
             System.out.println(user.currentNode.type);
             user.updateScore(user.currentNode.type);
         }
+        scoreLabel.setText(String.valueOf(user.score));
         System.out.println("Score: " + user.score);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -317,6 +373,7 @@ public class Game extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel diceLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -344,11 +401,15 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel scoreLabel;
     // End of variables declaration//GEN-END:variables
 }
