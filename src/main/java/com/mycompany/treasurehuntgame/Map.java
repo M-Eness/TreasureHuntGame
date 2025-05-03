@@ -49,6 +49,7 @@ class LinkedListMap {
 
     private void generateMapAdvanced(MapNode head) {
         MapNode dummy = head;
+
         while (dummy != null) {
             if (dummy.type == "forward") {
                 MapNode dummy2 = dummy;
@@ -67,6 +68,9 @@ class LinkedListMap {
                     }
                 }
                 dummy.jump = dummy2;
+            }
+            if (dummy.type == "start") { // node tipi start ise jump pointerını head e bağlıyorum.
+                dummy.jump = head;
             }
             dummy = dummy.next;
         }
@@ -95,14 +99,13 @@ class LinkedListMap {
                 forward++;
             } else if (randomType == "backward") {
                 backward++;
-            }else if (randomType == "mystery_box"){
+            } else if (randomType == "mystery_box") {
                 mystery_box++;
             }
-            while ((forward > 15 && randomType == "forward") || (backward > 10 && randomType == "backward") 
-                    || mystery_box > 10 && randomType == "mystery_box") {
+            while ((forward > 5 && randomType == "forward") || (backward > 5 && randomType == "backward")
+                    || mystery_box > 5 && randomType == "mystery_box") {
                 randomType = randomType(level);
             }
-            
 
             MapNode newNode = new MapNode(i, randomType);
             isSpecial(newNode);
@@ -124,7 +127,7 @@ class LinkedListMap {
         } else if (level == 2) {
             types = new String[]{"treasure", "trap", "empty", "forward", "backward"};
         } else {
-            types = new String[]{"treasure", "trap", "empty", "forward", "backward", "mystery_box", "poison", "heal"};
+            types = new String[]{"treasure", "trap", "empty", "forward", "backward", "mystery_box", "poison", "heal", "start"};
         }
         return types[rand.nextInt(types.length)];
     }

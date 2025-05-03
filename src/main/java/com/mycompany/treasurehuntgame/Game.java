@@ -34,6 +34,7 @@ public class Game extends javax.swing.JFrame {
     ImageIcon poisonIcon = new ImageIcon(getClass().getResource("/images/poison.png"));
     ImageIcon healIcon = new ImageIcon(getClass().getResource("/images/heal.png"));
     ImageIcon mysteryIcon = new ImageIcon(getClass().getResource("/images/mystery_box.png"));
+    ImageIcon startIcon = new ImageIcon(getClass().getResource("/images/start.png"));
 
     public Game(User user) {
         this.user = user;
@@ -69,6 +70,8 @@ public class Game extends javax.swing.JFrame {
                     healIcon;
                 case "mystery_box" ->
                     mysteryIcon;
+                case "start" ->
+                    startIcon;
                 default ->
                     null;
             };
@@ -119,6 +122,8 @@ public class Game extends javax.swing.JFrame {
                 healIcon;
             case "mystery_box" ->
                 mysteryIcon;
+            case "start" ->
+                startIcon;
             default ->
                 null;
         };
@@ -377,7 +382,7 @@ public class Game extends javax.swing.JFrame {
         if (currentLevel == 2) {
             advancedLevelMovement();
         }
-        if (currentLevel == 3) {
+        else if (currentLevel == 3) {
             advancedLevelMovement();
             if ((user.currentNode != null) && (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box")) {
                 // Node bunlardan biri ise özellik alındıktan sonra Node empty olacak
@@ -395,6 +400,13 @@ public class Game extends javax.swing.JFrame {
                 jLabel36.setText(String.valueOf(user.heal));
                 jLabel38.setText(String.valueOf(user.poison));
                 user.currentNode.type = "empty";
+            }
+            if (user.currentNode.type == "start") {
+                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
+                user.currentNode = user.currentNode.jump;
+                System.out.println("current node ındex : " + user.currentNode.index);
+                System.out.println("Node tipi start olduğu için başa gidildi");
+              
             }
         }
         if (user.currentNode != null) {
