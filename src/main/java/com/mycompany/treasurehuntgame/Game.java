@@ -130,10 +130,13 @@ public class Game extends javax.swing.JFrame {
             if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle beraber hesaplanıyor.
                 isOver();
             } else {
-                MapNode temp = user.currentNode;
+                user.currentNode.type = "empty";
+                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
                 user.currentNode = user.currentNode.jump;
-                temp.type = "empty";
-                updatePlayerPosition(temp.index, user.currentNode.index, temp.type);
+//                MapNode temp = user.currentNode;
+//                user.currentNode = user.currentNode.jump;
+//                temp.type = "empty";
+//                updatePlayerPosition(temp.index, user.currentNode.index, temp.type);
             }
         }
     }
@@ -182,7 +185,6 @@ public class Game extends javax.swing.JFrame {
         diceLabel = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         scoreLabel = new javax.swing.JLabel();
-        jLabel35 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -273,10 +275,6 @@ public class Game extends javax.swing.JFrame {
         scoreLabel.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(scoreLabel);
         scoreLabel.setBounds(560, 20, 80, 50);
-
-        jLabel35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/character.png"))); // NOI18N
-        getContentPane().add(jLabel35);
-        jLabel35.setBounds(180, 30, 80, 90);
 
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
         getContentPane().add(jLabel31);
@@ -403,7 +401,6 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
