@@ -22,8 +22,8 @@ public class Game extends javax.swing.JFrame {
      */
     // Userı tutmak için Game sınıfı user alıyor.
     static User user;
-    private JLabel[] mapLabels;
-    private LinkedListMap map;
+    public JLabel[] mapLabels;
+    public LinkedListMap map;
     int currentLevel = 1; // Güncel leveli tutar.
 
     ImageIcon forwardIcon = new ImageIcon(getClass().getResource("/images/forward_icon.png"));
@@ -70,10 +70,11 @@ public class Game extends javax.swing.JFrame {
         }
     }
 
-    private void startGame(User user) {
+    public void startGame(User user) {
         map = new LinkedListMap(30, currentLevel); // Güncel levele göre harita üretir.
         initializeMapDisplay(map, mapLabels);
         map.displayMap();
+        diceLabel.setText("0");
         System.out.println(getClass().getResource("/images/forward_icon.png"));
         Random rand = new Random();
         user.resetPosition();
@@ -94,7 +95,7 @@ public class Game extends javax.swing.JFrame {
             default ->
                 null;
         };
-        
+
         if (oldPos >= 0 && oldPos < mapLabels.length) {
             mapLabels[oldPos].setIcon(icon); // eski iconu yerine koy
         }
@@ -110,19 +111,26 @@ public class Game extends javax.swing.JFrame {
             this.dispose();  // Oyunu kapat
             return;
         }
-        int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
 
-        if (result == JOptionPane.YES_OPTION) {
-            currentLevel++;
-            mapLabels[user.currentNode.index].setForeground(null);
-            diceLabel.setText("0");
-            startGame(user);
-        } else {
-            JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
-            this.dispose();  // Oyunu kapat
-        }
+        Continue screen = new Continue(this, true, this);
+        screen.setSize(400, 400);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
+        //this.dispose();
+
+//        int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
+//                JOptionPane.YES_NO_OPTION,
+//                JOptionPane.QUESTION_MESSAGE);
+//
+//        if (result == JOptionPane.YES_OPTION) {
+//            currentLevel++;
+//            mapLabels[user.currentNode.index].setForeground(null);
+//            diceLabel.setText("0");
+//            startGame(user);
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Game Over! Thanks for playing.");
+//            this.dispose();  // Oyunu kapat
+//        }
     }
 
     private void level2Movement() {
