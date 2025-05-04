@@ -85,7 +85,7 @@ public class ScoreBoard extends javax.swing.JFrame {
         getContentPane().add(usernameText);
         usernameText.setBounds(220, 270, 320, 50);
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/scoreboard2.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/scoreboard.png"))); // NOI18N
         getContentPane().add(jLabel5);
         jLabel5.setBounds(0, 0, 800, 800);
 
