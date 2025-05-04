@@ -24,7 +24,7 @@ public class Game extends javax.swing.JFrame {
     static User user;
     public JLabel[] mapLabels;
     public LinkedListMap map;
-    int currentLevel = 3; // Güncel leveli tutar.
+    int currentLevel = 1; // Güncel leveli tutar.
 
     ImageIcon forwardIcon = new ImageIcon(getClass().getResource("/images/forward_icon.png"));
     ImageIcon backwardIcon = new ImageIcon(getClass().getResource("/images/backward_icon.png"));
@@ -172,12 +172,16 @@ public class Game extends javax.swing.JFrame {
     private void advancedLevelMovement() {
         while (user.currentNode != null && (user.currentNode.type == "forward" || user.currentNode.type == "backward")) {
             if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle beraber hesaplanıyor.
+                JOptionPane.showMessageDialog(null, "You took " + user.currentNode.jumpAmount + " steps forward. You have finished the level." );
                 isOver();
+                return;
             } else {
                 if (user.currentNode.type == "forward") {
                     System.out.println(user.currentNode.jumpAmount + " kadar ileri gittiniz");
+                    JOptionPane.showMessageDialog(null, "You took " + user.currentNode.jumpAmount + " steps forward" );
                 } else if (user.currentNode.type == "backward") {
                     System.out.println(user.currentNode.jumpAmount + " kadar geri gittiniz");
+                    JOptionPane.showMessageDialog(null, "You took " + user.currentNode.jumpAmount + " steps backward" );
                 }
                 user.currentNode.type = "empty";
                 updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
@@ -399,13 +403,16 @@ public class Game extends javax.swing.JFrame {
                 user.currentNode = user.currentNode.jump;
                 System.out.println("current node ındex : " + user.currentNode.index);
                 System.out.println("Node tipi start olduğu için başa gidildi");
+                JOptionPane.showMessageDialog(null, "You are returning to start point");
             }
             if ((user.currentNode != null) && (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box")) {
                 // Node bunlardan biri ise özellik alındıktan sonra Node empty olacak
                 if (user.currentNode.type == "poison") {
                     user.poison++;
+                    JOptionPane.showMessageDialog(null, "You get poison.");
                 } else if (user.currentNode.type == "heal") {
                     user.heal++;
+                    JOptionPane.showMessageDialog(null, "You get heal.");
                 } else if (user.currentNode.type == "mystery_box") {
                     user.updateScore(user.currentNode.type);
                 }

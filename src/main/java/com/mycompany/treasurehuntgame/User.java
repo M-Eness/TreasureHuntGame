@@ -41,16 +41,20 @@ public class User extends javax.swing.JFrame {
                 if (poison > 0) { // Elimizde poison varsa puan alamıyoruz.
                     poison--;
                     System.out.println("Elinizde poison olduğu için puan alamadınız!!");
+                    JOptionPane.showMessageDialog(null, "You don't get points for having poison.");
                 } else {
                     score += 10;
+                    JOptionPane.showMessageDialog(null, "You have arrived at the treasury. You have earned 10 points.");
                 }
                 break;
             case "trap":
                 if (heal > 0) { // Elimizde heal varsa tuzaktan etkilenmiyoruz.
                     heal--;
                     System.out.println("Elinizde heal olduğu için tuzaktan etkilenmediniz!!");
+                    JOptionPane.showMessageDialog(null, "You are not affected by trap because you have heal.");
                 } else {
                     score -= 5;
+                    JOptionPane.showMessageDialog(null, "You have arrived at the trap. You have lost 5 points.");
                 }
                 break;
             case "mystery_box":
@@ -60,17 +64,21 @@ public class User extends javax.swing.JFrame {
                     if (heal == 0) { // Elimizde heal yoksa tuzaktan etkileniyoruz.
                         score -= 10;
                         System.out.println("You get -10 points from mystery box");
+                        JOptionPane.showMessageDialog(null, "You get -10 points from mystery box.");
                     } else {
                         heal--;
                         System.out.println("Elinizde heal olduğu için mystery box tuzağından etkilenmediniz!!");
+                        JOptionPane.showMessageDialog(null, "You are not affected by mystery box's trap because you have heal.");
                     }
                 } else if (feature == 1) { // Mystery Box artı puan verecek.
                     if (poison == 0) {// Elimizde poison yoksa puan alıyoruz.
                         score += 20;
                         System.out.println("You get 20 points from mystery box");
+                        JOptionPane.showMessageDialog(null, "You get 20 points from mystery box");
                     } else {
                         poison--;
                         System.out.println("Elinizde poison olduğu için mystery boxtan puan alamadınız!!");
+                        JOptionPane.showMessageDialog(null, "You don't get mystery box's points for having poison.");
                     }
                 }
 
