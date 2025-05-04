@@ -102,6 +102,9 @@ public class Game extends javax.swing.JFrame {
             jLabel36.setVisible(true);
             jLabel37.setVisible(true);
             jLabel38.setVisible(true);
+            jLabel36.setText("0");
+            jLabel38.setText("0");
+
         }
     }
 
@@ -139,15 +142,16 @@ public class Game extends javax.swing.JFrame {
     private void isOver() {
         ScoreManager.saveScore(user, currentLevel);
         if (currentLevel >= 3) {
-            JOptionPane.showMessageDialog(null, "Game Over! You completed all levels.");
-            this.dispose();  // Oyunu kapat
-            return;
+            FinishScreen finish_screen = new FinishScreen(this, true, this);
+            //finish_screen.setSize(4, 400);
+            finish_screen.setLocationRelativeTo(null);
+            finish_screen.setVisible(true);
+        } else {
+            Continue screen = new Continue(this, true, this);
+            screen.setSize(400, 400);
+            screen.setLocationRelativeTo(null);
+            screen.setVisible(true);
         }
-
-        Continue screen = new Continue(this, true, this);
-        screen.setSize(400, 400);
-        screen.setLocationRelativeTo(null);
-        screen.setVisible(true);
         //this.dispose();
 
 //        int result = JOptionPane.showConfirmDialog(null, "Level " + currentLevel + " is over. Do you want to continue to Level " + (currentLevel + 1) + "?", "Continue?",
@@ -170,9 +174,15 @@ public class Game extends javax.swing.JFrame {
             if (user.currentNode.index + user.currentNode.jumpAmount > 29) { //Jump değeriyle beraber hesaplanıyor.
                 isOver();
             } else {
+                if (user.currentNode.type == "forward") {
+                    System.out.println(user.currentNode.jumpAmount + " kadar ileri gittiniz");
+                } else if (user.currentNode.type == "backward") {
+                    System.out.println(user.currentNode.jumpAmount + " kadar geri gittiniz");
+                }
                 user.currentNode.type = "empty";
                 updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
                 user.currentNode = user.currentNode.jump;
+
             }
         }
 
@@ -381,9 +391,15 @@ public class Game extends javax.swing.JFrame {
         }
         if (currentLevel == 2) {
             advancedLevelMovement();
-        }
-        else if (currentLevel == 3) {
+        } else if (currentLevel == 3) {
             advancedLevelMovement();
+
+            if (user.currentNode != null && user.currentNode.type == "start") {
+                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
+                user.currentNode = user.currentNode.jump;
+                System.out.println("current node ındex : " + user.currentNode.index);
+                System.out.println("Node tipi start olduğu için başa gidildi");
+            }
             if ((user.currentNode != null) && (user.currentNode.type == "poison" || user.currentNode.type == "heal" || user.currentNode.type == "mystery_box")) {
                 // Node bunlardan biri ise özellik alındıktan sonra Node empty olacak
                 if (user.currentNode.type == "poison") {
@@ -397,22 +413,16 @@ public class Game extends javax.swing.JFrame {
                 System.out.println("You get " + user.currentNode.type);
                 System.out.println("Poison " + user.poison);
                 System.out.println("Heal " + user.heal);
-                jLabel36.setText(String.valueOf(user.heal));
-                jLabel38.setText(String.valueOf(user.poison));
                 user.currentNode.type = "empty";
             }
-            if (user.currentNode.type == "start") {
-                updatePlayerPosition(user.currentNode.index, user.currentNode.jump.index, user.currentNode.type);
-                user.currentNode = user.currentNode.jump;
-                System.out.println("current node ındex : " + user.currentNode.index);
-                System.out.println("Node tipi start olduğu için başa gidildi");
-              
-            }
+
         }
         if (user.currentNode != null) {
             System.out.println(user.currentNode.type);
             user.updateScore(user.currentNode.type);
         }
+        jLabel36.setText(String.valueOf(user.heal));
+        jLabel38.setText(String.valueOf(user.poison));
         scoreLabel.setText(String.valueOf(user.score));
         System.out.println("Score: " + user.score);
 
